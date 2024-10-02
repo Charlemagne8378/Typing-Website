@@ -1,0 +1,55 @@
+# Activer la réécriture d'URL
+RewriteEngine On
+
+# Redirection des erreurs vers les pages d'erreur
+ErrorDocument 400 /views/errors/400.html
+ErrorDocument 401 /views/errors/401.html
+ErrorDocument 403 /views/errors/403.html
+ErrorDocument 404 /views/errors/404.html
+ErrorDocument 500 /views/errors/500.html
+ErrorDocument 502 /views/errors/502.html
+ErrorDocument 503 /views/errors/503.html
+ErrorDocument 504 /views/errors/504.html
+ErrorDocument 405 /views/errors/405.html
+ErrorDocument 408 /views/errors/408.html
+ErrorDocument 429 /views/errors/429.html
+ErrorDocument 451 /views/errors/451.html
+ErrorDocument 501 /views/errors/501.html
+ErrorDocument 511 /views/errors/511.html
+
+# Bloquer l'accès au dossier de configuration
+<Directory "/chemin/vers/ton/projet/config">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+# Bloquer l'accès à certains fichiers sensibles
+<FilesMatch "^.*\.env$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "^\.htaccess$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Forcer l'utilisation de HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Compression pour optimiser la performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
